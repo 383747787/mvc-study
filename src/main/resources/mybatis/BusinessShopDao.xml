@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--映射数据库表和Model的Dao接口配置-->
+<mapper namespace="com.funian.dao.BusinessShopDao">
+    <resultMap type="com.funian.model.BusinessShopEntity" id="resultMap" >
+        <result property="businessId" column="business_id" jdbcType="INTEGER" />
+        <result property="businessName" column="business_name" jdbcType="VARCHAR" />
+        <result property="businessPhoneNumber" column="business_phone" jdbcType="VARCHAR" />
+    </resultMap>
+    <!--用于引用的相同columns-->
+    <sql id="columns">
+        business_id, business_name, business_phone
+    </sql>
+
+    <select id="selectBusinessShop" resultMap="resultMap">
+        SELECT <include refid="columns" />
+        FROM business WHERE business_id = #{businessId}
+    </select>
+
+    <insert id="addBusinessShop" parameterType="com.funian.model.BusinessShopEntity">
+        INSERT INTO business
+        (business_id, business_name, business_phone)
+        VALUES  (#{businessId}, #{businessName}, #{businessPhoneNumber})
+    </insert>
+
+    <update id="updateBusinessShop" parameterType="com.funian.model.BusinessShopEntity">
+        UPDATE business
+        <set>
+            <if test="businessName !=null">
+                business_name = #{businessName,jdbcType=VARCHAR},
+            </if>
+            <if test="businessPhoneNumber !=null">
+                business_phone = #{businessPhoneNumber,jdbcType=VARCHAR}
+            </if>
+        </set>
+        WHERE business_id=#{businessId,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteBusinessShop" parameterType="int">
+        DELETE FROM business
+        WHERE business_id = #{businessId}
+    </delete>
+
+</mapper>
